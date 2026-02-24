@@ -1,18 +1,37 @@
-## Development Environment
+<div align="center">
 
-For detailed setup and development instructions, please refer to our [Development Guide](../docs/how-to-develop.md).
+# 🎉 Congratulations mhd-faisal! 🎉
 
-### User Interaction
+<img src="https://octodex.github.com/images/welcometocat.png" height="200px" />
 
-Consider the following when communicating with the staff.
+### 🌟 You've successfully completed the exercise! 🌟
 
-- The staff is not technical. Explain in simple terms as much as possible and avoid software jargon.
-- Any new code must be easy to maintain and understand, without significant coding experience.
+## 🚀 Share Your Success!
 
-## Program architecture
+**Show off your new skills and inspire others!**
 
-- The website users are the students and teachers. Make sure the user experience is simple.
-- Do not make additional apps or services.
-- Do not make command line tools.
-- Do not create a long single file application. Always use an easy-to-understand directory structure.
-- Only use HTML, CSS, Javascript, and Python. No other languages.
+<a href="https://twitter.com/intent/tweet?text=I%20just%20completed%20the%20%22Expand%20your%20team%20with%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Flabs-sandbox1%2Fskills-expand-your-team-with-copilot-mfaisal%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20X-1da1f2?style=for-the-badge&logo=x&logoColor=white" alt="Share on X" />
+</a>
+<a href="https://bsky.app/intent/compose?text=I%20just%20completed%20the%20%22Expand%20your%20team%20with%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Flabs-sandbox1%2Fskills-expand-your-team-with-copilot-mfaisal%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20Bluesky-0085ff?style=for-the-badge&logo=bluesky&logoColor=white" alt="Share on Bluesky" />
+</a>
+<a href="https://www.linkedin.com/feed/?shareActive=true&text=I%20just%20completed%20the%20%22Expand%20your%20team%20with%20GitHub%20Copilot%22%20GitHub%20Skills%20hands-on%20exercise!%20%F0%9F%8E%89%0A%0Ahttps%3A%2F%2Fgithub.com%2Flabs-sandbox1%2Fskills-expand-your-team-with-copilot-mfaisal%0A%0A%23GitHubSkills%20%23OpenSource%20%23GitHubLearn" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Share%20on%20LinkedIn-0077b5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Share on LinkedIn" />
+</a>
+
+### 🎯 What's Next?
+
+**Keep the momentum going!**
+
+[![](https://img.shields.io/badge/Return%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/labs-sandbox1/skills-expand-your-team-with-copilot-mfaisal/issues/1)
+[![GitHub Skills](https://img.shields.io/badge/Explore%20GitHub%20Skills-000000?style=for-the-badge&logo=github&logoColor=white)](https://learn.github.com/skills)
+
+*There's no better way to learn than building things!* 🚀
+
+</div>
+
+---
+
+&copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+
