@@ -569,6 +569,23 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="social-share-container">
+        <div class="share-label">Share:</div>
+        <div class="share-buttons">
+          <button class="share-button facebook" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Facebook">
+            <span class="share-icon">f</span>
+          </button>
+          <button class="share-button twitter" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter">
+            <span class="share-icon">𝕏</span>
+          </button>
+          <button class="share-button linkedin" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on LinkedIn">
+            <span class="share-icon">in</span>
+          </button>
+          <button class="share-button email" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share via Email">
+            <span class="share-icon">✉</span>
+          </button>
+        </div>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -586,6 +603,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for social share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", handleSocialShare);
+    });
 
     activitiesList.appendChild(activityCard);
   }
@@ -797,6 +820,47 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     );
+  }
+
+  // Handle social share button clicks
+  function handleSocialShare(event) {
+    const button = event.currentTarget;
+    const activityName = button.dataset.activity;
+    const description = button.dataset.description;
+    const schedule = button.dataset.schedule;
+    
+    // Create share text and URL
+    const shareText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
+    const shareUrl = window.location.href;
+    const encodedText = encodeURIComponent(shareText);
+    const encodedUrl = encodeURIComponent(shareUrl);
+    
+    // Determine which platform and open appropriate share link
+    if (button.classList.contains("facebook")) {
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
+        "_blank",
+        "width=600,height=400"
+      );
+    } else if (button.classList.contains("twitter")) {
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+        "_blank",
+        "width=600,height=400"
+      );
+    } else if (button.classList.contains("linkedin")) {
+      window.open(
+        `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+        "_blank",
+        "width=600,height=400"
+      );
+    } else if (button.classList.contains("email")) {
+      const subject = encodeURIComponent(`Join ${activityName} at Mergington High School`);
+      const body = encodeURIComponent(`Hi,\n\nI wanted to share this activity with you:\n\n${activityName}\n${description}\n\nSchedule: ${schedule}\n\nLearn more at: ${shareUrl}\n\nBest regards`);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+    
+    showMessage(`Sharing ${activityName}...`, "info");
   }
 
   // Show message function
