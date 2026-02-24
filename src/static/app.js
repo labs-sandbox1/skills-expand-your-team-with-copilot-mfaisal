@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
+  const calendarView = document.getElementById("calendar-view");
+  const cardViewBtn = document.getElementById("card-view-btn");
+  const calendarViewBtn = document.getElementById("calendar-view-btn");
   const messageDiv = document.getElementById("message");
   const registrationModal = document.getElementById("registration-modal");
   const modalActivityName = document.getElementById("modal-activity-name");
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
+  let currentView = "card"; // "card" or "calendar"
 
   // Authentication state
   let currentUser = null;
@@ -411,6 +415,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to display filtered activities
   function displayFilteredActivities() {
+    if (currentView === "calendar") {
+      displayCalendarView();
+      return;
+    }
+
     // Clear the activities list
     activitiesList.innerHTML = "";
 
@@ -589,6 +598,228 @@ document.addEventListener("DOMContentLoaded", () => {
 
     activitiesList.appendChild(activityCard);
   }
+
+  // Function to render calendar view
+  function displayCalendarView() {
+    // Clear calendar view
+    calendarView.innerHTML = "";
+
+    // Apply client-side filtering - same as card view
+    let filteredActivities = {};
+
+    Object.entries(allActivities).forEach(([name, details]) => {
+      const activityType = getActivityType(name, details.description);
+
+      // Apply category filter
+      if (currentFilter !== "all" && activityType !== currentFilter) {
+        return;
+      }
+
+      // Apply weekend filter if selected
+      if (currentTimeRange === "weekend" && details.schedule_details) {
+        const activityDays = details.schedule_details.days;
+        const isWeekendActivity = activityDays.some((day) =>
+          timeRanges.weekend.days.includes(day)
+        );
+
+        if (!isWeekendActivity) {
+          return;
+        }
+      }
+
+      // Apply search filter
+      const searchableContent = [
+        name.toLowerCase(),
+        details.description.toLowerCase(),
+        formatSchedule(details).toLowerCase(),
+      ].join(" ");
+
+      if (
+        searchQuery &&
+        !searchableContent.includes(searchQuery.toLowerCase())
+      ) {
+        return;
+      }
+
+      // Activity passed all filters, add to filtered list
+      filteredActivities[name] = details;
+    });
+
+    // Check if there are any results
+    if (Object.keys(filteredActivities).length === 0) {
+      calendarView.innerHTML = `
+        <div class="no-results">
+          <h4>No activities found</h4>
+          <p>Try adjusting your search or filter criteria</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Build calendar structure
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    
+    // Determine time range to show (6:00 AM to 8:00 PM)
+    const startHour = 6;
+    const endHour = 20;
+    const timeSlots = [];
+    
+    for (let hour = startHour; hour <= endHour; hour++) {
+      const displayHour = hour % 12 || 12;
+      const period = hour < 12 ? "AM" : "PM";
+      timeSlots.push({
+        hour: hour,
+        label: `${displayHour}:00 ${period}`,
+        time24: `${hour.toString().padStart(2, "0")}:00`
+      });
+    }
+
+    // Create calendar container
+    const calendarContainer = document.createElement("div");
+    calendarContainer.className = "calendar-container";
+
+    // Add header row
+    const timeHeaderCell = document.createElement("div");
+    timeHeaderCell.className = "calendar-header";
+    timeHeaderCell.textContent = "Time";
+    calendarContainer.appendChild(timeHeaderCell);
+
+    days.forEach((day) => {
+      const dayHeaderCell = document.createElement("div");
+      dayHeaderCell.className = "calendar-header";
+      dayHeaderCell.textContent = day;
+      calendarContainer.appendChild(dayHeaderCell);
+    });
+
+    // Build a map of activities by day and time
+    const activitiesByDayTime = {};
+    
+    Object.entries(filteredActivities).forEach(([name, details]) => {
+      if (!details.schedule_details) return;
+
+      const activityType = getActivityType(name, details.description);
+      const typeInfo = activityTypes[activityType];
+      
+      details.schedule_details.days.forEach((day) => {
+        const startTime = details.schedule_details.start_time;
+        const endTime = details.schedule_details.end_time;
+        
+        // Parse start hour
+        const [startHourNum] = startTime.split(":").map(Number);
+        
+        // Find which time slot this activity belongs to
+        for (let i = 0; i < timeSlots.length; i++) {
+          const slotHour = timeSlots[i].hour;
+          const nextSlotHour = i + 1 < timeSlots.length ? timeSlots[i + 1].hour : endHour + 1;
+          
+          // Check if activity starts in this time slot
+          if (startHourNum >= slotHour && startHourNum < nextSlotHour) {
+            const key = `${day}-${slotHour}`;
+            if (!activitiesByDayTime[key]) {
+              activitiesByDayTime[key] = [];
+            }
+            activitiesByDayTime[key].push({
+              name,
+              details,
+              type: activityType,
+              typeInfo
+            });
+            break;
+          }
+        }
+      });
+    });
+
+    // Create time slots and cells
+    timeSlots.forEach((timeSlot) => {
+      // Time label cell
+      const timeCell = document.createElement("div");
+      timeCell.className = "time-slot";
+      timeCell.textContent = timeSlot.label;
+      calendarContainer.appendChild(timeCell);
+
+      // Day cells
+      days.forEach((day) => {
+        const cell = document.createElement("div");
+        cell.className = "calendar-cell";
+        
+        const key = `${day}-${timeSlot.hour}`;
+        const activitiesInSlot = activitiesByDayTime[key] || [];
+        
+        // Add class based on number of activities
+        if (activitiesInSlot.length > 2) {
+          cell.classList.add("has-many");
+        } else if (activitiesInSlot.length > 1) {
+          cell.classList.add("has-multiple");
+        }
+
+        // Render each activity in this slot
+        activitiesInSlot.forEach(({ name, details, type, typeInfo }) => {
+          const takenSpots = details.participants.length;
+          const totalSpots = details.max_participants;
+          
+          const activityElement = document.createElement("div");
+          activityElement.className = "calendar-activity";
+          activityElement.style.backgroundColor = typeInfo.color;
+          activityElement.style.color = typeInfo.textColor;
+          activityElement.style.borderColor = typeInfo.textColor;
+          
+          activityElement.innerHTML = `
+            <span class="calendar-activity-name">${name}</span>
+            <span class="calendar-activity-enrollment">${takenSpots}/${totalSpots}</span>
+            <div class="calendar-tooltip">
+              <div class="calendar-tooltip-title">${name}</div>
+              <div class="calendar-tooltip-detail">
+                <span class="calendar-tooltip-label">Description:</span> ${details.description}
+              </div>
+              <div class="calendar-tooltip-detail">
+                <span class="calendar-tooltip-label">Schedule:</span> ${formatSchedule(details)}
+              </div>
+              <div class="calendar-tooltip-detail">
+                <span class="calendar-tooltip-label">Enrollment:</span> ${takenSpots}/${totalSpots} (${totalSpots - takenSpots} spots left)
+              </div>
+            </div>
+          `;
+          
+          // Add click handler to open registration modal
+          if (currentUser && takenSpots < totalSpots) {
+            activityElement.addEventListener("click", () => {
+              openRegistrationModal(name);
+            });
+          }
+          
+          cell.appendChild(activityElement);
+        });
+
+        calendarContainer.appendChild(cell);
+      });
+    });
+
+    calendarView.appendChild(calendarContainer);
+  }
+
+  // View toggle handlers
+  function switchView(view) {
+    currentView = view;
+    
+    if (view === "card") {
+      cardViewBtn.classList.add("active");
+      calendarViewBtn.classList.remove("active");
+      activitiesList.classList.remove("hidden");
+      calendarView.classList.add("hidden");
+      displayFilteredActivities();
+    } else {
+      cardViewBtn.classList.remove("active");
+      calendarViewBtn.classList.add("active");
+      activitiesList.classList.add("hidden");
+      calendarView.classList.remove("hidden");
+      displayCalendarView();
+    }
+  }
+
+  // Add event listeners for view toggle
+  cardViewBtn.addEventListener("click", () => switchView("card"));
+  calendarViewBtn.addEventListener("click", () => switchView("calendar"));
 
   // Event listeners for search and filter
   searchInput.addEventListener("input", (event) => {
