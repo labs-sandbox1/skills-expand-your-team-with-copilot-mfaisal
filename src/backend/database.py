@@ -165,7 +165,7 @@ initial_activities = {
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
     },
     "Manga Maniacs": {
-        "description": "Dive into epic adventures, epic battles, and unforgettable friendships! Discover amazing heroes, mysterious powers, and plot twists that'll blow your mind. Whether you love shonen action, shojo romance, or seinen mysteries, there's a manga world waiting for you!",
+        "description": "Dive into thrilling adventures, epic battles, and unforgettable friendships! Discover amazing heroes, mysterious powers, and plot twists that'll blow your mind. Whether you love shonen action, shojo romance, or seinen mysteries, there's a manga world waiting for you!",
         "schedule": "Tuesdays, 7:00 PM - 8:00 PM",
         "schedule_details": {
             "days": ["Tuesday"],
