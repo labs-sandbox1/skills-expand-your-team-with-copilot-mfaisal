@@ -37,6 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     technology: { label: "Technology", color: "#e8eaf6", textColor: "#3949ab" },
   };
 
+  // Calendar configuration
+  const CALENDAR_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const CALENDAR_START_HOUR = 6;  // 6:00 AM
+  const CALENDAR_END_HOUR = 20;   // 8:00 PM
+
   // State for activities and filters
   let allActivities = {};
   let currentFilter = "all";
@@ -657,11 +662,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Build calendar structure
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    
-    // Determine time range to show (6:00 AM to 8:00 PM)
-    const startHour = 6;
-    const endHour = 20;
+    // Determine time range to show
+    const startHour = CALENDAR_START_HOUR;
+    const endHour = CALENDAR_END_HOUR;
     const timeSlots = [];
     
     for (let hour = startHour; hour <= endHour; hour++) {
@@ -684,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timeHeaderCell.textContent = "Time";
     calendarContainer.appendChild(timeHeaderCell);
 
-    days.forEach((day) => {
+    CALENDAR_DAYS.forEach((day) => {
       const dayHeaderCell = document.createElement("div");
       dayHeaderCell.className = "calendar-header";
       dayHeaderCell.textContent = day;
@@ -739,7 +742,7 @@ document.addEventListener("DOMContentLoaded", () => {
       calendarContainer.appendChild(timeCell);
 
       // Day cells
-      days.forEach((day) => {
+      CALENDAR_DAYS.forEach((day) => {
         const cell = document.createElement("div");
         cell.className = "calendar-cell";
         
