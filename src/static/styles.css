@@ -205,6 +205,32 @@ section h3 {
   letter-spacing: 0.3px;
 }
 
+/* Difficulty Badge */
+.difficulty-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+
+.difficulty-badge[data-difficulty="Beginner"] {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.difficulty-badge[data-difficulty="Intermediate"] {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.difficulty-badge[data-difficulty="Advanced"] {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
 /* Capacity Indicator */
 .capacity-container {
   margin: 8px 0;
